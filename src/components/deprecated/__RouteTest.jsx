@@ -1,5 +1,9 @@
 import { Link } from "react-router-dom";
 
+/**
+ * SPA, CSR 테스트용 파일입니다.
+ */
+
 function RouteTest() {
   return (
     <>
