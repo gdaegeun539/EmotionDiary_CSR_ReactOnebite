@@ -7,8 +7,42 @@ import New from "./pages/New";
 import Edit from "./pages/Edit";
 import Diary from "./pages/Diary";
 
+const dummyData = [
+  {
+    id: 1,
+    emotion: 1,
+    content: "오늘의일기_1번",
+    date: 1659700954002,
+  },
+  {
+    id: 2,
+    emotion: 2,
+    content: "오늘의일기_2번",
+    date: 1659701038769,
+  },
+  {
+    id: 3,
+    emotion: 3,
+    content: "오늘의일기_3번",
+    date: 1659701052799,
+  },
+  {
+    id: 4,
+    emotion: 4,
+    content: "오늘의일기_4번",
+    date: 1659701072618,
+  },
+  {
+    id: 5,
+    emotion: 5,
+    content: "오늘의일기_5번",
+    date: 1659701088205,
+  },
+];
+
 function App() {
-  const [data, dispatch] = useReducer(reducer, []);
+  // 지금 더미데이터 들어갔음
+  const [data, dispatch] = useReducer(reducer, dummyData);
   const dataId = useRef(0);
   // Create
   function onCreate(date, content, emotion) {
