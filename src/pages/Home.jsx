@@ -23,7 +23,11 @@ function Home() {
       const lastDay = new Date(
         curDate.getFullYear(),
         curDate.getMonth() + 1,
-        0 /* 해당 달 0일은 전달 마지막일로 처리해줌 */
+        0 /* 해당 달 0일은 전달 마지막일로 처리해줌 */,
+        23,
+        59,
+        59,
+        99 /* 23:59:59.99까지 처리해야 해당 일의 데이터까지 처리 가능 */
       ).getTime();
 
       setData(

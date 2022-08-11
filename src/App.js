@@ -43,7 +43,8 @@ const dummyData = [
 function App() {
   // 지금 더미데이터 들어갔음
   const [data, dispatch] = useReducer(reducer, dummyData);
-  const dataId = useRef(0);
+  const dataId = useRef(data.length + 1);
+
   // Create
   function onCreate(date, content, emotion) {
     dispatch({
@@ -81,7 +82,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/new" element={<New />} />
-              <Route path="/edit" element={<Edit />} />
+              <Route path="/edit/:id" element={<Edit />} />
               <Route path="/diary/:id" element={<Diary />} />
             </Routes>
           </div>
@@ -107,9 +108,9 @@ function reducer(state, action) {
       break;
     }
     case "EDIT": {
-      newState = state.filter((it) =>
-        it.id === action.data.id ? { ...action.data } : it
-      );
+      newState = state.map((it) => {
+        return it.id === action.data.id ? { ...action.data } : it;
+      });
       break;
     }
 
