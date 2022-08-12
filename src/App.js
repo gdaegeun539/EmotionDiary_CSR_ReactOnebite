@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import React, { useReducer, useRef } from "react";
+import React, { useEffect, useReducer, useRef } from "react";
 import "./App.css";
 
 import Home from "./pages/Home";
@@ -7,43 +7,23 @@ import New from "./pages/New";
 import Edit from "./pages/Edit";
 import Diary from "./pages/Diary";
 
-const dummyData = [
-  {
-    id: 1,
-    emotion: 1,
-    content: "오늘의일기_1번",
-    date: 1659700954002,
-  },
-  {
-    id: 2,
-    emotion: 2,
-    content: "오늘의일기_2번",
-    date: 1659701038769,
-  },
-  {
-    id: 3,
-    emotion: 3,
-    content: "오늘의일기_3번",
-    date: 1659701052799,
-  },
-  {
-    id: 4,
-    emotion: 4,
-    content: "오늘의일기_4번",
-    date: 1659701072618,
-  },
-  {
-    id: 5,
-    emotion: 5,
-    content: "오늘의일기_5번",
-    date: 1659701088205,
-  },
-];
-
 function App() {
-  // 지금 더미데이터 들어갔음
-  const [data, dispatch] = useReducer(reducer, dummyData);
-  const dataId = useRef(data.length + 1);
+  const [data, dispatch] = useReducer(reducer, []);
+  const dataId = useRef(1);
+
+  // LocalStorage 데이터 불러오기
+  useEffect(() => {
+    const localData = localStorage.getItem("diary");
+    if (localData) {
+      const diaryList = JSON.parse(localData).sort((a, b) => {
+        return parseInt(b.id) - parseInt(a.id);
+      });
+      // LocalStorage 값이 빈 배열일때 or 연산자 사용해 초기 id값 반환
+      dataId.current = parseInt(diaryList[0]?.id) + 1 || 1;
+
+      dispatch({ type: "INIT", data: diaryList });
+    }
+  }, []);
 
   // Create
   function onCreate(date, content, emotion) {
@@ -117,6 +97,8 @@ function reducer(state, action) {
     default:
       return state;
   }
+
+  localStorage.setItem("diary", JSON.stringify(newState));
   return newState;
 }
 

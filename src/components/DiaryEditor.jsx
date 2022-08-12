@@ -1,4 +1,4 @@
-import { useState, useRef, useContext, useEffect } from "react";
+import { useState, useRef, useContext, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { DiaryDispatchContext } from "../App";
 import EmotionItem from "./EmotionItem";
@@ -11,13 +11,13 @@ function DiaryEditor({ isEdit, originData }) {
   const [emotion, setEmotion] = useState(3);
   const [date, setDate] = useState(getStringDate(new Date()));
   const [content, setContent] = useState("");
-  const { onCreate, onEdit } = useContext(DiaryDispatchContext);
+  const { onCreate, onEdit, onRemove } = useContext(DiaryDispatchContext);
   const contentRef = useRef();
   const navigate = useNavigate();
 
-  function handleClickEmote(emotion) {
+  const handleClickEmote = useCallback((emotion) => {
     setEmotion(emotion);
-  }
+  }, []);
 
   function handleSubmit() {
     if (content.length < 1) {
@@ -41,6 +41,14 @@ function DiaryEditor({ isEdit, originData }) {
     navigate("/", { replace: true });
   }
 
+  function handleRemove() {
+    if (window.confirm("일기를 삭제할까요?")) {
+      onRemove(originData.id);
+      alert("일기를 삭제했어요.");
+      navigate("/", { replace: true });
+    }
+  }
+
   useEffect(() => {
     if (isEdit) {
       setDate(getStringDate(new Date(originData.date)));
@@ -60,6 +68,12 @@ function DiaryEditor({ isEdit, originData }) {
               navigate(-1);
             }}
           />
+        }
+        rightChild={
+          // 수정상황시에만 렌더링
+          isEdit && (
+            <MyButton text="삭제하기" type="negative" onClick={handleRemove} />
+          )
         }
       />
       <div>

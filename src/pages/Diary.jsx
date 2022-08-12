@@ -12,6 +12,13 @@ function Diary() {
   const diaryList = useContext(DiaryStateContext);
   const navigate = useNavigate();
 
+  // mount시: titie 태그 변경
+  useEffect(() => {
+    const titleElement = document.getElementsByTagName("title")[0];
+    titleElement.innerHTML = `${id}번 일기`;
+  }, []);
+
+  // update시: 일기 존재 여부에 따라 판단
   useEffect(() => {
     if (diaryList.length >= 1) {
       const targetDiary = diaryList.find((it) => {

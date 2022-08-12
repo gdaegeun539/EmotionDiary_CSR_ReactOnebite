@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DiaryItem from "./DiaryItem";
 import MyButton from "./MyButton";
@@ -15,6 +15,7 @@ const filterOptionList = [
 
 function DiaryList({ diaryList }) {
   const navigate = useNavigate();
+  // react에서 생성해주면(setter등) 동일 ref를 보장해줌: memoization이 정상적으로 동작-controlmenu
   const [sortType, setSortType] = useState("latest");
   const [filter, setFilter] = useState("all");
 
@@ -74,7 +75,10 @@ function DiaryList({ diaryList }) {
   );
 }
 
-function ControlMenu({ value, onChange, optionList }) {
+const ControlMenu = React.memo(({ value, onChange, optionList }) => {
+  useEffect(() => {
+    console.log("Debug>>> ControlMenu 렌더링");
+  });
   return (
     <select
       className="ControlMenu"
@@ -88,7 +92,7 @@ function ControlMenu({ value, onChange, optionList }) {
       ))}
     </select>
   );
-}
+});
 
 DiaryList.defaultProps = {
   diaryList: [],
